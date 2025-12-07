@@ -1,5 +1,9 @@
-{% extends 'base.html' %} {% load static %} {% block title %}Форма товара{%
-endblock %} {% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Форма товара{% endblock %}
+
+{% block content %}
 <h2>{% if object %}Редактировать{% else %}Добавить{% endif %} товар</h2>
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %} {{ form.non_field_errors }}
