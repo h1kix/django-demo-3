@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% load static %} {% block title %}Форма товара{%
+endblock %} {% block content %}
+<h2>{% if object %}Редактировать{% else %}Добавить{% endif %} товар</h2>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %} {{ form.non_field_errors }}
+  <div class="row">
+    <div class="col-md-8">
+      {% for field in form %}
+      <div class="mb-3">
+        <label class="form-label">{{ field.label }}</label>
+        {{ field }}
+        <div class="text-danger">{{ field.errors }}</div>
+      </div>
+      {% endfor %}
+      <button class="btn btn-primary">Сохранить</button>
+      <a href="{% url 'product_list' %}" class="btn btn-secondary">Отмена</a>
+    </div>
+    <div class="col-md-4">
+      {% if object and object.image %}
+      <img src="{{ object.image.url }}" class="img-fluid" />
+      {% else %}
+      <img src="{% static 'images/picture.png' %}" class="img-fluid" />
+      {% endif %}
+    </div>
+  </div>
+</form>
+{% endblock %}

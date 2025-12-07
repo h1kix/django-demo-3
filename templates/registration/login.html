@@ -1,0 +1,29 @@
+{% extends 'base.html' %} {% block title %}Вход{% endblock %} {% block content
+%}
+<h2>Вход</h2>
+<form method="post">
+  {% csrf_token %}
+  <div class="mb-3">
+    <label for="id_username" class="form-label">Логин</label>
+    <input
+      type="text"
+      name="username"
+      autofocus
+      required
+      id="id_username"
+      class="form-control"
+    />
+  </div>
+  <div class="mb-3">
+    <label for="id_password" class="form-label">Пароль</label>
+    <input
+      type="password"
+      name="password"
+      required
+      id="id_password"
+      class="form-control"
+    />
+  </div>
+  <button class="btn btn-primary">Войти</button>
+</form>
+{% endblock %}

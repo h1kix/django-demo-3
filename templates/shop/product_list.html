@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Список товаров{% endblock %}
+
+{% block content %}
+  <h1>Список товаров</h1>
+  <div class="mb-3">
+    {% if can_add %}
+      <a href="{% url 'product_add' %}" class="btn btn-success">Добавить товар</a>
+    {% endif %}
+  </div>
+
+  <form method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+      <input type="text" name="q" value="{{ q }}" class="form-control" placeholder="Поиск...">
+    </div>
+    <div class="col-auto">
+      <select name="supplier" class="form-select">
+        <option value="">Все поставщики</option>
+        {% for s in suppliers %}
+          <option value="{{ s.id }}" {% if supplier_sel == s.id|stringformat:"s" %}selected{% endif %}>{{ s.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="col-auto">
+      <select name="sort" class="form-select">
+        <option value="">Сортировка</option>
+        <option value="quantity_asc" {% if sort=='quantity_asc' %}selected{% endif %}>Кол-во ↑</option>
+        <option value="quantity_desc" {% if sort=='quantity_desc' %}selected{% endif %}>Кол-во ↓</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button class="btn btn-primary">Применить</button>
+    </div>
+  </form>
+
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Фото</th>
+          <th>Наименование</th>
+          <th>Категория</th>
+          <th>Производитель</th>
+          <th>Поставщик</th>
+          <th>Цена</th>
+          <th>Кол-во</th>
+          <th>Скидка</th>
+          <th>Действия</th>
+        </tr>
+      </thead>
+      {% include 'shop/_product_table.html' %}
+    </table>
+  </div>
+
+  {% if is_paginated %}
+    <nav>
+      <ul class="pagination">
+        {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Prev</a></li>
+        {% endif %}
+        <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+        {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  {% endif %}
+
+<script>
+// debounce helper
+function debounce(fn, ms){
+  let t;
+  return function(...args){
+    clearTimeout(t);
+    t = setTimeout(()=>fn.apply(this,args), ms);
+  }
+}
+
+function updateTable(){
+  const params = new URLSearchParams(new FormData(document.querySelector('form')));
+  params.set('partial','1');
+  fetch('?' + params.toString())
+    .then(r => r.text())
+    .then(html => {
+      // replace table body
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const newTbody = doc.querySelector('tbody');
+      const table = document.querySelector('table');
+      const oldTbody = table.querySelector('tbody');
+      if(newTbody && oldTbody){ oldTbody.replaceWith(newTbody); }
+    })
+    .catch(err => console.error(err));
+}
+
+const inputs = document.querySelectorAll('form input, form select');
+inputs.forEach(i => i.addEventListener('input', debounce(updateTable, 350)));
+inputs.forEach(i => i.addEventListener('change', debounce(updateTable, 350)));
+</script>
+
+{% endblock %}

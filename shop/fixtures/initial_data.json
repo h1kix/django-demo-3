@@ -1,0 +1,59 @@
+[
+  {
+    "model": "shop.category",
+    "pk": 1,
+    "fields": { "name": "Бумага" }
+  },
+  {
+    "model": "shop.category",
+    "pk": 2,
+    "fields": { "name": "Письменные принадлежности" }
+  },
+  {
+    "model": "shop.manufacturer",
+    "pk": 1,
+    "fields": { "name": "Acme" }
+  },
+  {
+    "model": "shop.supplier",
+    "pk": 1,
+    "fields": { "name": "ООО Поставщик" }
+  },
+  {
+    "model": "shop.unit",
+    "pk": 1,
+    "fields": { "name": "шт." }
+  },
+  {
+    "model": "shop.product",
+    "pk": 1,
+    "fields": {
+      "name": "Блокнот A5",
+      "category": 2,
+      "description": "Удобный блокнот для заметок",
+      "manufacturer": 1,
+      "supplier": 1,
+      "unit": 1,
+      "price": "199.00",
+      "discount": "10.00",
+      "quantity": 15,
+      "image": null
+    }
+  },
+  {
+    "model": "shop.product",
+    "pk": 2,
+    "fields": {
+      "name": "Ручка синяя",
+      "category": 2,
+      "description": "Шариковая ручка",
+      "manufacturer": 1,
+      "supplier": 1,
+      "unit": 1,
+      "price": "49.00",
+      "discount": "20.00",
+      "quantity": 0,
+      "image": null
+    }
+  }
+]
